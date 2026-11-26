@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chanudi's CBSL & Career Olive Diary</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+          },
+          colors: {
+            cream: {
+              50: '#FAF9F5',
+              100: '#F4F2EA',
+              200: '#E9E5D8',
+              300: '#D8D2C0',
+            },
+            olive: {
+              50: '#F2F5EC',
+              100: '#E4EAD9',
+              200: '#C7D3B2',
+              300: '#A3B584',
+              400: '#7D9256',
+              500: '#5E7238',
+              600: '#4A5D23',
+              700: '#3B4A1C',
+              800: '#2B3614',
+            },
+            terracotta: {
+              50: '#FDF3F0',
+              100: '#FBE3DC',
+              500: '#C85A32',
+              600: '#A94622',
+            },
+            ochre: {
+              50: '#FEF8EE',
+              100: '#FDECD2',
+              500: '#D48C2A',
+              600: '#B0701B',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom botanical scrollbar and tactile paper styling */
+    body {
+      background-color: #FAF9F5;
+      color: #262E18;
+    }
+    .diary-paper {
+      background-color: #FFFFFF;
+      background-image: linear-gradient(to bottom, transparent 31px, rgba(125, 146, 86, 0.08) 32px);
+      background-size: 100% 32px;
+      box-shadow: 0 10px 30px -5px rgba(59, 74, 28, 0.08), 0 4px 12px -2px rgba(59, 74, 28, 0.04);
+    }
+    .diary-spine {
+      background: repeating-linear-gradient(
+        to bottom,
+        #E4EAD9 0px,
+        #E4EAD9 12px,
+        #FAF9F5 12px,
+        #FAF9F5 28px
+      );
+    }
+    textarea:focus, input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(74, 93, 35, 0.25);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F4F2EA;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #A3B584;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row font-sans antialiased selection:bg-olive-200 selection:text-olive-800">
+
+  <!-- Toast Notification Banner (No alert() used) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Left Navigation Sidebar (Desktop) / Top Header (Mobile) -->
+  <aside class="w-full lg:w-72 bg-olive-800 text-cream-50 flex-shrink-0 flex flex-col justify-between lg:min-h-screen lg:sticky lg:top-0 shadow-xl z-20">
+    <div>
+      <!-- Brand / Diary Cover Header -->
+      <div class="p-6 border-b border-olive-700/80">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-olive-600 border border-olive-400/40 flex items-center justify-center shadow-inner">
+            <!-- Botanical Olive Leaf SVG -->
+            <svg class="w-6 h-6 text-cream-100" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.5-3-7-7.5-7-12 4.5 0 9 2.5 12 7m-5 5c3-4.5 7.5-7 12-7 0 4.5-2.5 9-7 12m-5 0V10" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-[11px] uppercase tracking-widest text-olive-300 font-semibold block">2026 – 2028 Planner</span>
+            <h1 class="font-serif text-lg font-bold tracking-tight text-white leading-snug">Chanudi's Olive Diary</h1>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-olive-200 leading-relaxed">
+          Pathway to <span class="text-white font-semibold">CBSL International Operations</span> &amp; <span class="text-white font-semibold">SLIIT FMAS First Class</span>
+        </p>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="p-3 lg:p-4 flex lg:flex-col gap-2 overflow-x-auto">
+        <button onclick="switchTab('diary')" id="nav-diary" class="nav-btn flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-olive-600 text-white shadow-sm">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="whitespace-nowrap">Weekly Diary Pages</span>
+        </button>
+
+        <button onclick="switchTab('northstar')" id="nav-northstar" class="nav-btn flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-olive-200 hover:bg-olive-700/60 hover:text-white">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          </svg>
+          <span class="whitespace-nowrap">North Star &amp; Roadmap</span>
+        </button>
+
+        <button onclick="switchTab('academics')" id="nav-academics" class="nav-btn flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-olive-200 hover:bg-olive-700/60 hover:text-white">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="whitespace-nowrap">GPA &amp; CIMA Tracker</span>
+        </button>
+      </nav>
+
+      <!-- Quick Priority Legend (Desktop) -->
+      <div class="hidden lg:block px-6 py-4 mt-2">
+        <div class="bg-olive-700/50 rounded-2xl p-4 border border-olive-600/40">
+          <p class="text-[11px] uppercase tracking-wider font-semibold text-olive-300 mb-3">Task Importance Key</p>
+          <div class="space-y-2.5 text-xs">
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-terracotta-500 ring-2 ring-terracotta-500/30"></span>
+              <span class="text-cream-100 font-medium">Critical (Non-Negotiable)</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-ochre-500 ring-2 ring-ochre-500/30"></span>
+              <span class="text-cream-100 font-medium">High Impact (Career/CIMA)</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-olive-400 ring-2 ring-olive-400/30"></span>
+              <span class="text-cream-100 font-medium">Routine / Guardrail</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Backup & Status Footer -->
+    <div class="hidden lg:block p-5 border-t border-olive-700/80 space-y-3">
+      <div class="flex items-center justify-between text-xs text-olive-300">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Auto-saved locally
+        </span>
+        <span>Sunday 6 PM Check-in</span>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="exportData()" class="flex-1 py-2 px-3 rounded-xl bg-olive-700 hover:bg-olive-600 text-xs font-medium text-cream-100 transition">
+          Backup JSON
+        </button>
+        <button onclick="openResetModal()" class="py-2 px-3 rounded-xl bg-olive-900/60 hover:bg-terracotta-600/80 text-xs font-medium text-olive-300 hover:text-white transition" title="Reset to Default Sample">
+          Reset
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Workspace Area -->
+  <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 lg:py-8">
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: ONE-PAGE-PER-WEEK DIARY                                       -->
+    <!-- ===================================================================== -->
+    <section id="view-diary" class="space-y-6">
+      <!-- Top Diary Page Navigation Controls -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-olive-200/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+          <button onclick="prevWeek()" id="btn-prev-week" class="px-3.5 py-2 rounded-xl bg-cream-100 hover:bg-olive-100 text-olive-800 text-sm font-medium transition disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1.5">
+            <span>&larr;</span> Prev
+          </button>
+
+          <select id="week-selector" onchange="selectWeek(this.value)" class="px-3.5 py-2 rounded-xl bg-olive-50 border border-olive-200 text-olive-800 text-sm font-semibold cursor-pointer max-w-[230px] sm:max-w-xs truncate">
+          </select>
+
+          <button onclick="nextWeek()" id="btn-next-week" class="px-3.5 py-2 rounded-xl bg-cream-100 hover:bg-olive-100 text-olive-800 text-sm font-medium transition disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1.5">
+            Next <span>&rarr;</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+          <button onclick="addNewWeekPage()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-olive-600 hover:bg-olive-700 text-white text-sm font-semibold shadow-sm transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            New Weekly Diary Page
+          </button>
+        </div>
+      </div>
+
+      <!-- Tactile Single Diary Page Container -->
+      <div class="diary-paper rounded-3xl border border-olive-200/80 overflow-hidden flex flex-col md:flex-row">
+        <!-- Decorative Diary Notebook Spine -->
+        <div class="hidden md:block w-6 diary-spine border-r border-olive-200/70 flex-shrink-0"></div>
+
+        <!-- Diary Page Inner Sheet -->
+        <div class="flex-1 p-5 sm:p-8 lg:p-10 space-y-8">
+          
+          <!-- Diary Page Header -->
+          <div class="border-b-2 border-olive-200 pb-6 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+            <div class="space-y-2 flex-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span id="diary-week-badge" class="px-3 py-1 rounded-full bg-olive-600 text-white text-xs font-bold tracking-wide uppercase">Week 1</span>
+                <input id="diary-date-range" type="text" oninput="updateCurrentWeekField('dateRange', this.value)" class="text-sm font-medium text-olive-700 bg-olive-50/80 px-3 py-1 rounded-lg border border-olive-200/60 w-56" placeholder="e.g., Nov 30 – Dec 6, 2026" />
+              </div>
+              <input id="diary-title" type="text" oninput="updateCurrentWeekField('title', this.value)" class="font-serif text-2xl sm:text-3xl font-bold text-olive-800 bg-transparent w-full border-b border-transparent hover:border-olive-200 focus:border-olive-500 py-1 transition" placeholder="Weekly Focus Theme..." />
+            </div>
+
+            <!-- Sunday Check-in Status Pill -->
+            <div class="flex items-center gap-3 bg-cream-100 px-4 py-2.5 rounded-2xl border border-cream-300/70 self-start lg:self-end">
+              <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-olive-800">
+                <input type="checkbox" id="diary-completed-check" onchange="updateCurrentWeekField('reviewCompleted', this.checked)" class="w-4 h-4 rounded text-olive-600 accent-olive-600 cursor-pointer" />
+                <span>Sunday 6 PM Review Done</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- WHAT TO LEARN THIS WEEK (Curriculum / Focus Guide Box) -->
+          <div class="bg-olive-50/90 rounded-2xl p-5 sm:p-6 border border-olive-200 relative">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-olive-600 text-white flex items-center justify-center shadow-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-serif font-bold text-olive-800 text-base">What You Should Learn &amp; Focus On This Week</h3>
+                  <p class="text-xs text-olive-600">Specific target concepts for BOC Trade Services, CIMA, and CBSL prep</p>
+                </div>
+              </div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-olive-600 bg-white px-2.5 py-1 rounded-lg border border-olive-200">Editable Guide</span>
+            </div>
+            <textarea id="diary-curriculum" rows="3" oninput="updateCurrentWeekField('curriculumGuide', this.value)" class="w-full bg-white/85 rounded-xl p-3.5 text-sm text-olive-900 leading-relaxed border border-olive-200/80 resize-y" placeholder="List the exact SWIFT codes, CIMA chapters, or FX concepts to learn this week..."></textarea>
+          </div>
+
+          <!-- COLOR-CODED WEEKLY ACTION TASKS -->
+          <div class="bg-cream-50 rounded-2xl p-5 sm:p-6 border border-cream-200 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 class="font-serif font-bold text-olive-800 text-lg">Color-Coded Action Priorities</h3>
+                <p class="text-xs text-olive-600">Sorted by strategic impact toward CBSL IOD &amp; First Class Honours</p>
+              </div>
+              <div class="flex flex-wrap gap-1.5 text-[11px] font-semibold">
+                <span class="px-2.5 py-0.5 rounded-full bg-terracotta-100 text-terracotta-600">Critical</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-ochre-100 text-ochre-600">High</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-olive-100 text-olive-700">Routine</span>
+              </div>
+            </div>
+
+            <!-- Task List Container -->
+            <div id="weekly-tasks-list" class="space-y-2.5"></div>
+
+            <!-- Add Task to Current Week Form -->
+            <form onsubmit="addWeeklyTask(event)" class="pt-2 flex flex-col sm:flex-row gap-2">
+              <input id="new-weekly-task-text" type="text" required placeholder="Add a priority task for this week..." class="flex-1 px-3.5 py-2.5 rounded-xl bg-white border border-olive-200 text-sm text-olive-900" />
+              <select id="new-weekly-task-priority" class="px-3 py-2.5 rounded-xl bg-white border border-olive-200 text-sm font-medium text-olive-800">
+                <option value="critical">Critical (Terracotta)</option>
+                <option value="high" selected>High Impact (Amber)</option>
+                <option value="routine">Routine / Guardrail (Olive)</option>
+              </select>
+              <button type="submit" class="px-4 py-2.5 rounded-xl bg-olive-600 hover:bg-olive-700 text-white text-sm font-semibold transition">
+                + Add Task
+              </button>
+            </form>
+          </div>
+
+          <!-- STRUCTURED DIARY JOURNAL HEADINGS (What to Jot Down) -->
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-olive-200 pb-2">
+              <h3 class="font-serif text-xl font-bold text-olive-800">Weekly Reflection &amp; Learning Log</h3>
+              <span class="text-xs text-olive-500 italic">Click any box below to jot down your notes</span>
+            </div>
+
+            <!-- Section 1: BOC Trade Services -->
+            <div class="rounded-2xl border border-olive-200/90 bg-white p-5 shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="log-boc" class="font-serif font-bold text-olive-800 text-base flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-terracotta-100 text-terracotta-600 text-xs font-sans font-bold flex items-center justify-center">01</span>
+                  BOC Trade Services &amp; FX Desk Log
+                </label>
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-terracotta-50 text-terracotta-600 border border-terracotta-100">CBSL IOD Foundation</span>
+              </div>
+              <p class="text-xs text-olive-600 bg-cream-50 px-3 py-2 rounded-lg border-l-2 border-terracotta-500">
+                <strong>What to jot down:</strong> SWIFT messages observed (MT103, MT202, MT700), Letter of Credit steps, Nostro/Vostro account reconciliations, and how commercial trade settlements move USD liquidity.
+              </p>
+              <textarea id="log-boc" rows="4" oninput="updateCurrentWeekLog('bocLog', this.value)" class="w-full rounded-xl p-3.5 text-sm text-gray-800 bg-cream-50/50 border border-olive-200/70 leading-relaxed resize-y" placeholder="Jot down what you learned at the BOC Trade Services desk this week..."></textarea>
+            </div>
+
+            <!-- Section 2: SLIIT FMAS Academics & 3.87 GPA -->
+            <div class="rounded-2xl border border-olive-200/90 bg-white p-5 shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="log-academics" class="font-serif font-bold text-olive-800 text-base flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-terracotta-100 text-terracotta-600 text-xs font-sans font-bold flex items-center justify-center">02</span>
+                  SLIIT FMAS Academics &amp; 3.87 SGPA Check
+                </label>
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-terracotta-50 text-terracotta-600 border border-terracotta-100">First Class Target (3.70+)</span>
+              </div>
+              <p class="text-xs text-olive-600 bg-cream-50 px-3 py-2 rounded-lg border-l-2 border-terracotta-500">
+                <strong>What to jot down:</strong> Study hours completed, quantitative modules covered, continuous assessment/quiz scores (are they at A / A- level?), and any upcoming deadlines.
+              </p>
+              <textarea id="log-academics" rows="3" oninput="updateCurrentWeekLog('academicsLog', this.value)" class="w-full rounded-xl p-3.5 text-sm text-gray-800 bg-cream-50/50 border border-olive-200/70 leading-relaxed resize-y" placeholder="Track your FMAS study hours, quiz results, and module progress..."></textarea>
+            </div>
+
+            <!-- Section 3: CIMA Progress -->
+            <div class="rounded-2xl border border-olive-200/90 bg-white p-5 shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="log-cima" class="font-serif font-bold text-olive-800 text-base flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-ochre-100 text-ochre-600 text-xs font-sans font-bold flex items-center justify-center">03</span>
+                  CIMA Study Progress (BA3 / BA4 &amp; Beyond)
+                </label>
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-ochre-50 text-ochre-600 border border-ochre-100">Professional Credential</span>
+              </div>
+              <p class="text-xs text-olive-600 bg-cream-50 px-3 py-2 rounded-lg border-l-2 border-ochre-500">
+                <strong>What to jot down:</strong> Chapters finished in BA3 (Financial Accounting) or BA4 (Ethics &amp; Law), practice question accuracy %, and target exam booking window.
+              </p>
+              <textarea id="log-cima" rows="3" oninput="updateCurrentWeekLog('cimaLog', this.value)" class="w-full rounded-xl p-3.5 text-sm text-gray-800 bg-cream-50/50 border border-olive-200/70 leading-relaxed resize-y" placeholder="Record CIMA chapters completed and mock question scores..."></textarea>
+            </div>
+
+            <!-- Section 4: CBSL Macro & External Sector Briefing Notes -->
+            <div class="rounded-2xl border border-olive-200/90 bg-white p-5 shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="log-cbsl" class="font-serif font-bold text-olive-800 text-base flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-ochre-100 text-ochre-600 text-xs font-sans font-bold flex items-center justify-center">04</span>
+                  CBSL Macro &amp; External Sector Briefing Notes
+                </label>
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-ochre-50 text-ochre-600 border border-ochre-100">MT Exam &amp; Interview Prep</span>
+              </div>
+              <p class="text-xs text-olive-600 bg-cream-50 px-3 py-2 rounded-lg border-l-2 border-ochre-500">
+                <strong>What to jot down:</strong> Gross Official Reserves level, LKR/USD spot movement, workers' remittances/tourism inflows, and Monetary Policy (SDFR/SLFR) takeaways from Sunday's briefing.
+              </p>
+              <textarea id="log-cbsl" rows="3" oninput="updateCurrentWeekLog('cbslLog', this.value)" class="w-full rounded-xl p-3.5 text-sm text-gray-800 bg-cream-50/50 border border-olive-200/70 leading-relaxed resize-y" placeholder="Summarize key numbers and insights from your weekly CBSL external sector briefing..."></textarea>
+            </div>
+
+            <!-- Section 5: Health, Energy & Boundary Check -->
+            <div class="rounded-2xl border border-olive-200/90 bg-white p-5 shadow-xs space-y-3">
+              <div class="flex items-center justify-between">
+                <label for="log-health" class="font-serif font-bold text-olive-800 text-base flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-olive-100 text-olive-700 text-xs font-sans font-bold flex items-center justify-center">05</span>
+                  Energy, Sleep &amp; Boundary Guardrail Check
+                </label>
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-olive-100 text-olive-700">Sustainability</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-olive-50/60 p-3.5 rounded-xl border border-olive-200/70">
+                <div>
+                  <label class="block text-[11px] font-semibold uppercase tracking-wider text-olive-700 mb-1">Avg Sleep (Hrs/Night)</label>
+                  <input id="log-sleep" type="text" oninput="updateCurrentWeekLog('sleepHours', this.value)" class="w-full px-3 py-1.5 rounded-lg bg-white border border-olive-200 text-sm font-semibold text-olive-900" placeholder="e.g., 7.5 hrs" />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold uppercase tracking-wider text-olive-700 mb-1">Energy Score (1–10)</label>
+                  <input id="log-energy" type="text" oninput="updateCurrentWeekLog('energyScore', this.value)" class="w-full px-3 py-1.5 rounded-lg bg-white border border-olive-200 text-sm font-semibold text-olive-900" placeholder="e.g., 8 / 10" />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold uppercase tracking-wider text-olive-700 mb-1">Extracurriculars &lt; 4h?</label>
+                  <select id="log-guardrail" onchange="updateCurrentWeekLog('guardrailHeld', this.value)" class="w-full px-3 py-1.5 rounded-lg bg-white border border-olive-200 text-sm font-semibold text-olive-900">
+                    <option value="Yes - Protected">Yes — Protected</option>
+                    <option value="Slightly Over">Slightly Over</option>
+                    <option value="Breached">Breached — Rebalance</option>
+                  </select>
+                </div>
+              </div>
+
+              <textarea id="log-health" rows="2" oninput="updateCurrentWeekLog('healthLog', this.value)" class="w-full rounded-xl p-3.5 text-sm text-gray-800 bg-cream-50/50 border border-olive-200/70 leading-relaxed resize-y" placeholder="Notes on sleep rhythm, fasting window consistency, or saying 'no' to low-priority distractions..."></textarea>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: NORTH STAR & LONG-TERM ROADMAP                                -->
+    <!-- ===================================================================== -->
+    <section id="view-northstar" class="hidden space-y-6">
+      <!-- Hero Banner -->
+      <div class="bg-olive-800 text-cream-50 rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <span class="inline-block px-3 py-1 rounded-full bg-olive-600/90 border border-olive-400/40 text-xs font-semibold tracking-wider uppercase text-olive-100">
+            2026 – 2028 Strategic Blueprint
+          </span>
+          <h2 class="font-serif text-2xl sm:text-4xl font-bold text-white leading-tight">
+            Central Bank of Sri Lanka — International Operations
+          </h2>
+          <p class="text-sm sm:text-base text-olive-200 leading-relaxed">
+            Every weekly decision filters through four core pillars: mastering cross-border FX &amp; trade settlements at BOC, elevating your SLIIT FMAS GPA to First Class Honours, completing CIMA, and protecting your energy.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 Core Pillar Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-olive-200/80 shadow-xs space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600 bg-terracotta-50 px-2.5 py-1 rounded-lg inline-block">Primary Target</span>
+          <h3 class="font-serif font-bold text-lg text-olive-900">CBSL IOD (MT Intake)</h3>
+          <p class="text-xs text-olive-700 leading-relaxed">Staff Class Grade I via competitive exam (IQ, Analytical Writing, Economic GK) + Commercial Bank Treasury backup.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-olive-200/80 shadow-xs space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600 bg-terracotta-50 px-2.5 py-1 rounded-lg inline-block">Academic Gate</span>
+          <h3 class="font-serif font-bold text-lg text-olive-900">3.53 &rarr; 3.70+ CGPA</h3>
+          <p class="text-xs text-olive-700 leading-relaxed">SLIIT BSc (Hons) FMAS. Requires ~3.87 average SGPA across remaining 4 semesters for First Class Honours.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-olive-200/80 shadow-xs space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-ochre-600 bg-ochre-50 px-2.5 py-1 rounded-lg inline-block">Practical FX Edge</span>
+          <h3 class="font-serif font-bold text-lg text-olive-900">BOC Trade Services</h3>
+          <p class="text-xs text-olive-700 leading-relaxed">Nov 30, 2026 – May 2027. SWIFT (MT103/MT202/MT700), Letters of Credit, Nostro accounts &amp; FX settlements.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-olive-200/80 shadow-xs space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-olive-700 bg-olive-100 px-2.5 py-1 rounded-lg inline-block">Credential &amp; Rules</span>
+          <h3 class="font-serif font-bold text-lg text-olive-900">CIMA &amp; Boundaries</h3>
+          <p class="text-xs text-olive-700 leading-relaxed">BA1 &amp; BA2 passed. Clear BA3 &amp; BA4 next. Step down from Dept. VP Jan 2027; cap extracurriculars &lt; 4 hrs/wk.</p>
+        </div>
+      </div>
+
+      <!-- Color-Coded Master Roadmap Board -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-olive-200/80 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-olive-200 pb-4">
+          <div>
+            <h3 class="font-serif text-2xl font-bold text-olive-900">Color-Coded Long-Term Milestones</h3>
+            <p class="text-xs sm:text-sm text-olive-600">Tasks grouped and color-coded by strategic importance to your 2028 goal</p>
+          </div>
+
+          <!-- Filter Buttons -->
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="filterMasterTasks('all')" class="master-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-olive-700 text-white" data-filter="all">All</button>
+            <button onclick="filterMasterTasks('critical')" class="master-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-terracotta-50 text-terracotta-600 hover:bg-terracotta-100" data-filter="critical">Critical</button>
+            <button onclick="filterMasterTasks('high')" class="master-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-ochre-50 text-ochre-600 hover:bg-ochre-100" data-filter="high">High Impact</button>
+            <button onclick="filterMasterTasks('routine')" class="master-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-olive-50 text-olive-700 hover:bg-olive-100" data-filter="routine">Guardrails</button>
+          </div>
+        </div>
+
+        <!-- Master Tasks List -->
+        <div id="master-tasks-list" class="space-y-3"></div>
+
+        <!-- Add New Long-Term Milestone -->
+        <form onsubmit="addMasterTask(event)" class="pt-4 border-t border-olive-100 flex flex-col sm:flex-row gap-2.5">
+          <input id="new-master-task-title" type="text" required placeholder="Add a new long-term milestone or decision guardrail..." class="flex-1 px-4 py-2.5 rounded-xl bg-cream-50 border border-olive-200 text-sm text-olive-900" />
+          <input id="new-master-task-timeline" type="text" placeholder="Timeline (e.g., Mid-2027)" class="sm:w-44 px-3.5 py-2.5 rounded-xl bg-cream-50 border border-olive-200 text-sm text-olive-900" />
+          <select id="new-master-task-priority" class="px-3.5 py-2.5 rounded-xl bg-cream-50 border border-olive-200 text-sm font-medium text-olive-800">
+            <option value="critical">Critical (Terracotta)</option>
+            <option value="high" selected>High Impact (Amber)</option>
+            <option value="routine">Guardrail / Routine (Olive)</option>
+          </select>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-olive-600 hover:bg-olive-700 text-white text-sm font-semibold transition">
+            + Add Milestone
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 3: INTERACTIVE GPA & CIMA TRACKER                                -->
+    <!-- ===================================================================== -->
+    <section id="view-academics" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Interactive SLIIT FMAS First Class Calculator -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-olive-200/80 shadow-sm space-y-6">
+          <div class="border-b border-olive-200 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-olive-600">SLIIT FMAS Honours Simulator</span>
+            <h2 class="font-serif text-2xl font-bold text-olive-900 mt-1">First Class GPA Path (3.53 &rarr; 3.70+)</h2>
+            <p class="text-xs sm:text-sm text-olive-600 mt-1">
+              Starting from your <strong>3.53 CGPA</strong> across Years 1 &amp; 2 (4 semesters), adjust your projected Semester GPAs below to see how your final Cumulative GPA moves.
+            </p>
+          </div>
+
+          <!-- Live Projected CGPA Banner -->
+          <div id="gpa-result-banner" class="rounded-2xl p-5 bg-olive-50 border border-olive-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-olive-700">Projected Graduation CGPA</span>
+              <div class="flex items-baseline gap-3 mt-1">
+                <span id="projected-cgpa-value" class="font-serif text-4xl font-bold text-olive-800">3.70</span>
+                <span id="projected-class-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-olive-600 text-white">First Class Honours Unlocked</span>
+              </div>
+            </div>
+            <div class="text-left sm:text-right">
+              <span class="text-xs text-olive-600 block">Remaining 4-Sem Avg</span>
+              <span id="remaining-avg-value" class="text-xl font-bold text-olive-800">3.87</span>
+            </div>
+          </div>
+
+          <!-- Semester Inputs -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3.5 rounded-xl bg-cream-100 border border-cream-300/70">
+              <div>
+                <span class="text-sm font-bold text-olive-900">Years 1 &amp; 2 Completed (4 Semesters)</span>
+                <span class="block text-xs text-olive-600">Locked baseline cumulative GPA</span>
+              </div>
+              <span class="px-3.5 py-1.5 rounded-lg bg-white border border-olive-200 font-bold text-olive-800 text-sm">3.53 CGPA</span>
+            </div>
+
+            <div id="semester-inputs-container" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <!-- Interactive CIMA Progress Tracker -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-olive-200/80 shadow-sm space-y-6">
+          <div class="border-b border-olive-200 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-ochre-600">Professional Qualification</span>
+            <h2 class="font-serif text-2xl font-bold text-olive-900 mt-1">CIMA Module Roadmap</h2>
+            <p class="text-xs text-olive-600 mt-1">Click any module pill to update your completion status.</p>
+          </div>
+
+          <div id="cima-modules-list" class="space-y-3"></div>
+
+          <div class="bg-cream-50 rounded-2xl p-4 border border-cream-200 text-xs text-olive-700 leading-relaxed">
+            <strong class="text-olive-900">Strategy Rule:</strong> Focus on clearing <strong>BA3</strong> and <strong>BA4</strong> during your BOC internship weekends so you enter Year 4 with the full CIMA Certificate in Business Accounting completed.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Mobile Backup / Reset Footer -->
+    <div class="lg:hidden mt-8 pt-6 border-t border-olive-200 flex items-center justify-between text-xs text-olive-700">
+      <span>Auto-saved to your browser</span>
+      <div class="flex gap-2">
+        <button onclick="exportData()" class="px-3 py-1.5 rounded-lg bg-olive-100 text-olive-800 font-semibold">Backup JSON</button>
+        <button onclick="openResetModal()" class="px-3 py-1.5 rounded-lg bg-terracotta-50 text-terracotta-600 font-semibold">Reset</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Custom Confirmation Modal (No browser confirm() or alert() used) -->
+  <div id="reset-modal" class="fixed inset-0 bg-olive-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-olive-200 space-y-4">
+      <h3 class="font-serif text-xl font-bold text-olive-900">Reset Diary to Default Sample?</h3>
+      <p class="text-sm text-olive-700 leading-relaxed">
+        This will restore the original Week 1 &amp; Week 2 sample diary pages, roadmap milestones, and GPA calculator defaults. Consider exporting a JSON backup first.
+      </p>
+      <div class="flex justify-end gap-2.5 pt-2">
+        <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-cream-100 hover:bg-cream-200 text-olive-800 text-sm font-semibold">Cancel</button>
+        <button onclick="confirmResetData()" class="px-4 py-2 rounded-xl bg-terracotta-500 hover:bg-terracotta-600 text-white text-sm font-semibold">Yes, Reset Sample</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // DEFAULT DATA & SAMPLE DIARY PAGES (WEEKS 1 & 2 PRE-POPULATED)
+    // =========================================================================
+    const STORAGE_KEY = 'chanudi_cbsl_olive_diary_v1';
+
+    const DEFAULT_STATE = {
+      activeTab: 'diary',
+      currentWeekIndex: 0,
+      masterFilter: 'all',
+      weeks: [
+        {
+          id: 'week-1',
+          weekNumber: 1,
+          dateRange: 'Nov 30 – Dec 6, 2026',
+          title: 'BOC Trade Services Onboarding & SWIFT Foundations',
+          reviewCompleted: false,
+          curriculumGuide:
+            '• BOC Desk: Learn the difference between SWIFT MT103 (customer credit transfer) and MT202 (bank-to-bank transfer), plus how Nostro accounts settle USD.\n• CIMA BA3: Revise double-entry accounting, trial balance, and accruals/prepayments.\n• SLIIT FMAS: Map weekday evening study blocks (12–15 hrs/week) to protect your 3.87 SGPA.',
+          tasks: [
+            { id: 'w1-t1', text: 'Observe end-to-end execution of an MT103 outward remittance at BOC Trade Desk', priority: 'critical', done: false },
+            { id: 'w1-t2', text: 'Complete 15 hours of SLIIT FMAS module revision & problem sets', priority: 'critical', done: false },
+            { id: 'w1-t3', text: 'Finish CIMA BA3 Chapters 1–3 & score >80% on practice quiz', priority: 'high', done: false },
+            { id: 'w1-t4', text: 'Read Sunday 6 PM CBSL External Sector briefing & log reserve trends', priority: 'high', done: false },
+            { id: 'w1-t5', text: 'Confirm smooth handover of Rotaract musical show tasks', priority: 'routine', done: true }
+          ],
+          bocLog: 'Sample: Completed orientation at BOC Head Office Trade Services. Observed how outward telegraphic transfers are screened for compliance before generating an MT103 SWIFT message via our USD Nostro correspondent bank in New York.',
+          academicsLog: 'Sample: Logged 13 study hours across Advanced Financial Mathematics and Applied Statistics. Completed multivariate distribution tutorial ahead of schedule.',
+          cimaLog: 'Sample: Revised double-entry fundamentals and accruals in BA3. Scored 84% on 25 practice questions.',
+          cbslLog: 'Sample: Reviewed CBSL External Sector Performance update—workers’ remittances and tourism inflows continue to anchor gross official reserves and LKR/USD stability.',
+          sleepHours: '7.5 hrs',
+          energyScore: '8 / 10',
+          guardrailHeld: 'Yes - Protected',
+          healthLog: 'Sample: Maintained 6 PM–6 AM fasting window and 7.5 hours of sleep despite transitioning to full-time office attire and commute.'
+        },
+        {
+          id: 'week-2',
+          weekNumber: 2,
+          dateRange: 'Dec 7 – Dec 13, 2026',
+          title: 'Letters of Credit (MT700) & FX Counter Liquidity',
+          reviewCompleted: false,
+          curriculumGuide:
+            '• BOC Desk: Study the lifecycle of an Import Letter of Credit (MT700), key UCP 600 document checks (Bill of Lading, Commercial Invoice), and how BOC quotes morning FX counter rates.\n• CIMA BA3: Master Non-Current Assets, depreciation methods, and inventory valuation (IAS 2).\n• CBSL Prep: Understand how commercial bank import LC demand translates into interbank USD demand.',
+          tasks: [
+            { id: 'w2-t1', text: 'Trace an Import LC file from application to MT700 issuance & document scrutiny', priority: 'critical', done: false },
+            { id: 'w2-t2', text: 'Submit SLIIT FMAS Continuous Assessment 1 targeting A / A+ grade', priority: 'critical', done: false },
+            { id: 'w2-t3', text: 'Complete CIMA BA3 Depreciation & Inventory chapters + 30 MCQs', priority: 'high', done: false },
+            { id: 'w2-t4', text: 'Compare BOC daily USD selling/buying counter rates against CBSL indicative rate', priority: 'high', done: false },
+            { id: 'w2-t5', text: 'Keep FMASSC Dept. VP handovers under 3 hours total this week', priority: 'routine', done: false }
+          ],
+          bocLog: 'Sample: Shadowed senior officers checking import shipping documents under an LC. Learned how discrepancies in Bills of Lading delay settlement and require applicant waivers.',
+          academicsLog: 'Sample: Focused on time-series stationarity proofs and started drafting CA-1 report.',
+          cimaLog: 'Sample: Worked through straight-line vs. reducing-balance depreciation schedules in BA3.',
+          cbslLog: 'Sample: Tracked LKR/USD spot rate movements and noted how seasonal year-end import demand affects interbank FX liquidity.',
+          sleepHours: '7.0 hrs',
+          energyScore: '8 / 10',
+          guardrailHeld: 'Yes - Protected',
+          healthLog: 'Sample: Kept Sunday evening completely free for weekly reflection and meal/saree prep for Monday.'
+        }
+      ],
+      masterTasks: [
+        { id: 'm1', title: 'Achieve ~3.87 average SGPA across remaining 4 semesters to graduate with First Class Honours (3.70+ CGPA)', timeline: 'Nov 2026 – Jun 2028', priority: 'critical', done: false },
+        { id: 'm2', title: 'Master SWIFT protocols (MT103, MT202, MT700), Nostro reconciliations & FX flows at BOC Trade Services', timeline: 'Nov 30, 2026 – May 2027', priority: 'critical', done: false },
+        { id: 'm3', title: 'Pass CIMA BA3 (Financial Accounting) & BA4 (Ethics & Law) to complete Certificate Level', timeline: 'Mid-2027', priority: 'high', done: false },
+        { id: 'm4', title: 'Design Final-Year Quantitative Research Project on FX Volatility or Optimal Foreign Reserve Allocation', timeline: '2027 – Jun 2028', priority: 'high', done: false },
+        { id: 'm5', title: 'Build weekly habit of reading CBSL External Sector Performance & Annual Economic Review for MT Exam', timeline: 'Weekly to 2028', priority: 'high', done: false },
+        { id: 'm6', title: 'Step down cleanly from FMASSC Department Vice President role (do not run for Dept. President)', timeline: 'Jan 2027', priority: 'routine', done: false },
+        { id: 'm7', title: 'Evaluate Rotaract Club of SLIIT Presidency in Mar/Apr 2027 strictly against 3.70+ GPA trajectory', timeline: 'Mar – Apr 2027', priority: 'routine', done: false }
+      ],
+      semesters: [
+        { id: 'y3s1', name: 'Year 3 – Semester 1', target: 3.87, projected: 3.87 },
+        { id: 'y3s2', name: 'Year 3 – Semester 2', target: 3.87, projected: 3.87 },
+        { id: 'y4s1', name: 'Year 4 – Semester 1', target: 3.87, projected: 3.87 },
+        { id: 'y4s2', name: 'Year 4 – Semester 2', target: 3.87, projected: 3.87 }
+      ],
+      cimaModules: [
+        { code: 'BA1', name: 'Fundamentals of Business Economics', level: 'Certificate Level', status: 'Completed' },
+        { code: 'BA2', name: 'Fundamentals of Management Accounting', level: 'Certificate Level', status: 'Completed' },
+        { code: 'BA3', name: 'Fundamentals of Financial Accounting', level: 'Certificate Level', status: 'In Progress' },
+        { code: 'BA4', name: 'Fundamentals of Ethics, Governance & Law', level: 'Certificate Level', status: 'Upcoming' },
+        { code: 'E1 / P1 / F1', name: 'Operational Level Pillars & Case Study', level: 'Operational Level', status: 'Upcoming' },
+        { code: 'E2 / P2 / F2', name: 'Management Level Pillars & Case Study', level: 'Management Level', status: 'Upcoming' }
+      ]
+    };
+
+    let appState = loadState();
+
+    // =========================================================================
+    // STORAGE & UTILITY HELPERS
+    // =========================================================================
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+        const parsed = JSON.parse(raw);
+        return { ...JSON.parse(JSON.stringify(DEFAULT_STATE)), ...parsed };
+      } catch (e) {
+        console.error('Failed to load state:', e);
+        return JSON.parse(JSON.stringify(DEFAULT_STATE));
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Failed to save state:', e);
+      }
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'bg-olive-800 text-cream-50 px-4 py-2.5 rounded-xl shadow-lg border border-olive-600 text-xs font-medium flex items-center gap-2 transition-opacity duration-300';
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-olive-400"></span><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 2400);
+    }
+
+    function getPriorityBadgeHTML(priority) {
+      if (priority === 'critical') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-terracotta-100 text-terracotta-600 border border-terracotta-500/20 whitespace-nowrap">Critical</span>`;
+      }
+      if (priority === 'high') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-ochre-100 text-ochre-600 border border-ochre-500/20 whitespace-nowrap">High Impact</span>`;
+      }
+      return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-olive-100 text-olive-700 border border-olive-500/20 whitespace-nowrap">Routine / Guardrail</span>`;
+    }
+
+    function getPriorityBorderClass(priority) {
+      if (priority === 'critical') return 'border-l-4 border-l-terracotta-500';
+      if (priority === 'high') return 'border-l-4 border-l-ochre-500';
+      return 'border-l-4 border-l-olive-500';
+    }
+
+    // =========================================================================
+    // NAVIGATION TABS
+    // =========================================================================
+    function switchTab(tabName) {
+      appState.activeTab = tabName;
+      saveState();
+
+      ['diary', 'northstar', 'academics'].forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`nav-${t}`);
+        if (t === tabName) {
+          view.classList.remove('hidden');
+          btn.className = 'nav-btn flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-olive-600 text-white shadow-sm';
+        } else {
+          view.classList.add('hidden');
+          btn.className = 'nav-btn flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-olive-200 hover:bg-olive-700/60 hover:text-white';
+        }
+      });
+    }
+
+    // =========================================================================
+    // VIEW 1: WEEKLY DIARY PAGE RENDERING & INTERACTIONS
+    // =========================================================================
+    function renderDiaryPage() {
+      const weeks = appState.weeks;
+      if (appState.currentWeekIndex >= weeks.length) appState.currentWeekIndex = weeks.length - 1;
+      if (appState.currentWeekIndex < 0) appState.currentWeekIndex = 0;
+
+      const week = weeks[appState.currentWeekIndex];
+
+      // Populate selector dropdown
+      const selector = document.getElementById('week-selector');
+      selector.innerHTML = weeks.map((w, idx) =>
+        `<option value="${idx}" ${idx === appState.currentWeekIndex ? 'selected' : ''}>Week ${w.weekNumber}: ${w.dateRange}</option>`
+      ).join('');
+
+      // Prev / Next buttons state
+      document.getElementById('btn-prev-week').disabled = appState.currentWeekIndex === 0;
+      document.getElementById('btn-next-week').disabled = appState.currentWeekIndex === weeks.length - 1;
+
+      // Header & Curriculum fields
+      document.getElementById('diary-week-badge').textContent = `Week ${week.weekNumber}`;
+      document.getElementById('diary-date-range').value = week.dateRange;
+      document.getElementById('diary-title').value = week.title;
+      document.getElementById('diary-completed-check').checked = !!week.reviewCompleted;
+      document.getElementById('diary-curriculum').value = week.curriculumGuide;
+
+      // Journal textareas & metrics
+      document.getElementById('log-boc').value = week.bocLog || '';
+      document.getElementById('log-academics').value = week.academicsLog || '';
+      document.getElementById('log-cima').value = week.cimaLog || '';
+      document.getElementById('log-cbsl').value = week.cbslLog || '';
+      document.getElementById('log-sleep').value = week.sleepHours || '';
+      document.getElementById('log-energy').value = week.energyScore || '';
+      document.getElementById('log-guardrail').value = week.guardrailHeld || 'Yes - Protected';
+      document.getElementById('log-health').value = week.healthLog || '';
+
+      // Render Color-Coded Weekly Tasks (sorted by importance: critical -> high -> routine)
+      const priorityWeight = { critical: 1, high: 2, routine: 3 };
+      const sortedTasks = [...week.tasks].sort((a, b) => priorityWeight[a.priority] - priorityWeight[b.priority]);
+
+      const tasksContainer = document.getElementById('weekly-tasks-list');
+      if (sortedTasks.length === 0) {
+        tasksContainer.innerHTML = `<p class="text-xs text-olive-500 italic py-2">No tasks added for this week yet. Add your top priorities below.</p>`;
+      } else {
+        tasksContainer.innerHTML = sortedTasks.map(task => `
+          <div class="flex items-center justify-between gap-3 bg-white p-3 rounded-xl border border-olive-200/80 ${getPriorityBorderClass(task.priority)} transition hover:shadow-xs">
+            <label class="flex items-center gap-3 cursor-pointer flex-1 min-w-0">
+              <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleWeeklyTask('${task.id}')" class="w-4 h-4 rounded accent-olive-600 cursor-pointer flex-shrink-0" />
+              <span class="text-sm ${task.done ? 'line-through text-olive-400' : 'text-olive-900 font-medium'} break-words">${escapeHTML(task.text)}</span>
+            </label>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              ${getPriorityBadgeHTML(task.priority)}
+              <button onclick="deleteWeeklyTask('${task.id}')" class="text-olive-400 hover:text-terracotta-500 p-1 rounded-lg transition" title="Remove task">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function prevWeek() {
+      if (appState.currentWeekIndex > 0) {
+        appState.currentWeekIndex--;
+        saveState();
+        renderDiaryPage();
+      }
+    }
+
+    function nextWeek() {
+      if (appState.currentWeekIndex < appState.weeks.length - 1) {
+        appState.currentWeekIndex++;
+        saveState();
+        renderDiaryPage();
+      }
+    }
+
+    function selectWeek(idx) {
+      appState.currentWeekIndex = parseInt(idx, 10);
+      saveState();
+      renderDiaryPage();
+    }
+
+    function updateCurrentWeekField(field, value) {
+      appState.weeks[appState.currentWeekIndex][field] = value;
+      saveState();
+      if (field === 'dateRange') {
+        const selector = document.getElementById('week-selector');
+        selector.options[appState.currentWeekIndex].text = `Week ${appState.weeks[appState.currentWeekIndex].weekNumber}: ${value}`;
+      }
+    }
+
+    function updateCurrentWeekLog(field, value) {
+      appState.weeks[appState.currentWeekIndex][field] = value;
+      saveState();
+    }
+
+    function addWeeklyTask(e) {
+      e.preventDefault();
+      const input = document.getElementById('new-weekly-task-text');
+      const priority = document.getElementById('new-weekly-task-priority').value;
+      const text = input.value.trim();
+      if (!text) return;
+
+      appState.weeks[appState.currentWeekIndex].tasks.push({
+        id: 'wt-' + Date.now(),
+        text,
+        priority,
+        done: false
+      });
+      input.value = '';
+      saveState();
+      renderDiaryPage();
+      showToast('Weekly priority added');
+    }
+
+    function toggleWeeklyTask(taskId) {
+      const tasks = appState.weeks[appState.currentWeekIndex].tasks;
+      const target = tasks.find(t => t.id === taskId);
+      if (target) {
+        target.done = !target.done;
+        saveState();
+        renderDiaryPage();
+      }
+    }
+
+    function deleteWeeklyTask(taskId) {
+      const week = appState.weeks[appState.currentWeekIndex];
+      week.tasks = week.tasks.filter(t => t.id !== taskId);
+      saveState();
+      renderDiaryPage();
+    }
+
+    function addNewWeekPage() {
+      const nextNum = appState.weeks.length + 1;
+      const newPage = {
+        id: 'week-' + Date.now(),
+        weekNumber: nextNum,
+        dateRange: `Week ${nextNum} Dates`,
+        title: `Week ${nextNum}: BOC Trade Desk & Quantitative Focus`,
+        reviewCompleted: false,
+        curriculumGuide:
+          '• BOC Desk: Identify one new trade finance instrument, SWIFT message field, or Nostro reconciliation step.\n• CIMA: Complete 2 chapters and 25+ practice questions.\n• SLIIT FMAS: Review lecture notes within 48 hours to maintain 3.87 SGPA standard.',
+        tasks: [
+          { id: 'nt-' + Date.now() + '-1', text: 'Document 1 key FX / Trade Finance workflow learned at BOC', priority: 'critical', done: false },
+          { id: 'nt-' + Date.now() + '-2', text: 'Complete weekly SLIIT FMAS problem sets (A / A- standard)', priority: 'critical', done: false },
+          { id: 'nt-' + Date.now() + '-3', text: 'Log CIMA study block & Sunday 6 PM CBSL External Sector notes', priority: 'high', done: false }
+        ],
+        bocLog: '',
+        academicsLog: '',
+        cimaLog: '',
+        cbslLog: '',
+        sleepHours: '7.5 hrs',
+        energyScore: '8 / 10',
+        guardrailHeld: 'Yes - Protected',
+        healthLog: ''
+      };
+
+      appState.weeks.push(newPage);
+      appState.currentWeekIndex = appState.weeks.length - 1;
+      saveState();
+      renderDiaryPage();
+      showToast(`Created Week ${nextNum} diary page`);
+    }
+
+    // =========================================================================
+    // VIEW 2: NORTH STAR & ROADMAP RENDERING
+    // =========================================================================
+    function renderMasterTasks() {
+      const container = document.getElementById('master-tasks-list');
+      const filter = appState.masterFilter || 'all';
+      const priorityWeight = { critical: 1, high: 2, routine: 3 };
+
+      const filtered = appState.masterTasks
+        .filter(t => filter === 'all' || t.priority === filter)
+        .sort((a, b) => priorityWeight[a.priority] - priorityWeight[b.priority]);
+
+      container.innerHTML = filtered.map(task => `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-cream-50/80 border border-olive-200/80 ${getPriorityBorderClass(task.priority)}">
+          <label class="flex items-start sm:items-center gap-3.5 cursor-pointer flex-1">
+            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleMasterTask('${task.id}')" class="mt-1 sm:mt-0 w-4 h-4 rounded accent-olive-600 cursor-pointer flex-shrink-0" />
+            <div>
+              <span class="text-sm font-semibold ${task.done ? 'line-through text-olive-400' : 'text-olive-900'}">${escapeHTML(task.title)}</span>
+              ${task.timeline ? `<span class="block text-xs text-olive-600 mt-0.5">Target Window: ${escapeHTML(task.timeline)}</span>` : ''}
+            </div>
+          </label>
+          <div class="flex items-center gap-2 self-end sm:self-center">
+            ${getPriorityBadgeHTML(task.priority)}
+            <button onclick="deleteMasterTask('${task.id}')" class="text-olive-400 hover:text-terracotta-500 p-1 rounded-lg transition" title="Delete milestone">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterMasterTasks(filter) {
+      appState.masterFilter = filter;
+      saveState();
+      document.querySelectorAll('.master-filter-btn').forEach(btn => {
+        if (btn.dataset.filter === filter) {
+          btn.classList.add('ring-2', 'ring-olive-600');
+        } else {
+          btn.classList.remove('ring-2', 'ring-olive-600');
+        }
+      });
+      renderMasterTasks();
+    }
+
+    function addMasterTask(e) {
+      e.preventDefault();
+      const titleInput = document.getElementById('new-master-task-title');
+      const timelineInput = document.getElementById('new-master-task-timeline');
+      const priority = document.getElementById('new-master-task-priority').value;
+
+      const title = titleInput.value.trim();
+      if (!title) return;
+
+      appState.masterTasks.push({
+        id: 'm-' + Date.now(),
+        title,
+        timeline: timelineInput.value.trim() || 'Ongoing',
+        priority,
+        done: false
+      });
+
+      titleInput.value = '';
+      timelineInput.value = '';
+      saveState();
+      renderMasterTasks();
+      showToast('Long-term milestone added');
+    }
+
+    function toggleMasterTask(id) {
+      const target = appState.masterTasks.find(t => t.id === id);
+      if (target) {
+        target.done = !target.done;
+        saveState();
+        renderMasterTasks();
+      }
+    }
+
+    function deleteMasterTask(id) {
+      appState.masterTasks = appState.masterTasks.filter(t => t.id !== id);
+      saveState();
+      renderMasterTasks();
+    }
+
+    // =========================================================================
+    // VIEW 3: GPA CALCULATOR & CIMA TRACKER
+    // =========================================================================
+    function renderAcademicsView() {
+      const semContainer = document.getElementById('semester-inputs-container');
+      semContainer.innerHTML = appState.semesters.map((sem, idx) => `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-olive-200/90">
+          <div>
+            <span class="text-sm font-bold text-olive-900">${sem.name}</span>
+            <span class="block text-xs text-olive-600">Benchmark needed: ${sem.target.toFixed(2)} SGPA</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="range" min="3.00" max="4.00" step="0.01" value="${sem.projected}" oninput="updateSemesterGPA(${idx}, this.value)" class="w-28 sm:w-36 accent-olive-600 cursor-pointer" />
+            <input type="number" min="0" max="4" step="0.01" value="${sem.projected.toFixed(2)}" onchange="updateSemesterGPA(${idx}, this.value)" class="w-20 px-2.5 py-1.5 rounded-xl bg-olive-50 border border-olive-200 text-sm font-bold text-olive-900 text-center" />
+          </div>
+        </div>
+      `).join('');
+
+      recalculateCGPA();
+
+      // Render CIMA Modules
+      const cimaContainer = document.getElementById('cima-modules-list');
+      cimaContainer.innerHTML = appState.cimaModules.map((mod, idx) => {
+        let badgeStyle = 'bg-olive-100 text-olive-700';
+        if (mod.status === 'Completed') badgeStyle = 'bg-olive-600 text-white';
+        if (mod.status === 'In Progress') badgeStyle = 'bg-ochre-100 text-ochre-600 border border-ochre-500/30';
+
+        return `
+          <div onclick="cycleCimaStatus(${idx})" class="cursor-pointer p-3.5 rounded-2xl bg-cream-50 hover:bg-olive-50/70 border border-olive-200/80 flex items-center justify-between gap-3 transition">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-olive-900">${mod.code}</span>
+                <span class="text-[11px] text-olive-600">• ${mod.level}</span>
+              </div>
+              <p class="text-xs text-olive-700 mt-0.5">${mod.name}</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${badgeStyle}">${mod.status}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateSemesterGPA(index, val) {
+      let num = parseFloat(val);
+      if (isNaN(num)) num = 3.87;
+      num = Math.min(4.0, Math.max(0.0, num));
+      appState.semesters[index].projected = num;
+      saveState();
+      renderAcademicsView();
+    }
+
+    function recalculateCGPA() {
+      const baseCGPA = 3.53; // 4 completed semesters
+      const semSum = appState.semesters.reduce((acc, s) => acc + s.projected, 0);
+      const remainingAvg = semSum / 4;
+      const finalCGPA = ((baseCGPA * 4) + semSum) / 8;
+
+      document.getElementById('projected-cgpa-value').textContent = finalCGPA.toFixed(2);
+      document.getElementById('remaining-avg-value').textContent = remainingAvg.toFixed(2);
+
+      const badge = document.getElementById('projected-class-badge');
+      const banner = document.getElementById('gpa-result-banner');
+
+      if (finalCGPA >= 3.70) {
+        badge.textContent = 'First Class Honours Unlocked (3.70+)';
+        badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-olive-600 text-white';
+        banner.className = 'rounded-2xl p-5 bg-olive-50 border border-olive-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+      } else {
+        const gap = (3.70 - finalCGPA).toFixed(2);
+        badge.textContent = `${gap} below First Class (Second Upper)`;
+        badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-ochre-500 text-white';
+        banner.className = 'rounded-2xl p-5 bg-ochre-50 border border-ochre-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+      }
+    }
+
+    function cycleCimaStatus(idx) {
+      const order = ['Upcoming', 'In Progress', 'Completed'];
+      const current = appState.cimaModules[idx].status;
+      const next = order[(order.indexOf(current) + 1) % order.length];
+      appState.cimaModules[idx].status = next;
+      saveState();
+      renderAcademicsView();
+      showToast(`${appState.cimaModules[idx].code} marked as ${next}`);
+    }
+
+    // =========================================================================
+    // BACKUP & RESET CONTROLS
+    // =========================================================================
+    function exportData() {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(appState, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute('href', dataStr);
+      dlAnchor.setAttribute('download', `chanudi-cbsl-diary-backup-${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+      showToast('Diary backup downloaded');
+    }
+
+    function openResetModal() {
+      const modal = document.getElementById('reset-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeResetModal() {
+      const modal = document.getElementById('reset-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function confirmResetData() {
+      localStorage.removeItem(STORAGE_KEY);
+      appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      saveState();
+      closeResetModal();
+      initApp();
+      showToast('Restored default sample diary');
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    function initApp() {
+      renderDiaryPage();
+      renderMasterTasks();
+      renderAcademicsView();
+      switchTab(appState.activeTab || 'diary');
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
